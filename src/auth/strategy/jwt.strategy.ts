@@ -1,25 +1,29 @@
-import { Injectable } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
-import { PassportStrategy } from "@nestjs/passport";
-import { ExtractJwt, Strategy } from "passport-jwt";
-import { PrismaService } from "src/prisma/prisma.service";
+import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { PassportStrategy } from '@nestjs/passport';
+import { ExtractJwt, Strategy } from 'passport-jwt';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
-  constructor(config: ConfigService, private prisma: PrismaService) {
+  constructor(
+    config: ConfigService,
+    private prisma: PrismaService,
+  ) {
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(), secretOrKey: config.get('JWT_SECRET')
-    })
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      secretOrKey: config.get('JWT_SECRET'),
+    });
   }
 
-  async validate(payload: {sub: number, email: string}) {
-  const user = await this.prisma.users.findUnique({
-    where : {
-      id:  payload.sub
-    }
-  })
-  // Its good idea to delete hash
-  delete user.hash  
-   return user
+  async validate(payload: { sub: number; email: string }) {
+    const user = await this.prisma.users.findUnique({
+      where: {
+        id: payload.sub,
+      },
+    });
+    // Its good idea to delete hash
+    delete user.hash;
+    return user;
   }
 }
