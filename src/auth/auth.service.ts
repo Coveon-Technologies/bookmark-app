@@ -71,7 +71,7 @@ export class AuthService {
   }
 
   // We do not need await here because it returns a promise
-  signToken(userId: number, email: string): Promise<string> {
+  async signToken(userId: number, email: string): Promise<{access_token: string}> {
     const payload = {
       sub: userId,
       email
@@ -80,6 +80,10 @@ export class AuthService {
     const secret =  this.config.get('JWT_SECRET')
 
     // Return tokens
-    return this.jtw.signAsync(payload, { expiresIn : '15m', secret }) 
+    const token =  await this.jtw.signAsync(payload, { expiresIn : '15m', secret }) 
+
+    return {
+      access_token: token
+    }
   }
 }
