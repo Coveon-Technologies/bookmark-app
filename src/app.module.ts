@@ -7,14 +7,14 @@ import { BookmarkModule } from './bookmark/bookmark.module';
 import { PrismaModule } from './prisma/prisma.module';
 
 @Module({
-  imports: [ 
-    AuthModule, 
+  imports: [
+    AuthModule,
     UserModule,
-    BookmarkModule, 
-    PrismaModule, 
+    BookmarkModule,
+    PrismaModule,
     ConfigModule.forRoot({
-      isGlobal:true
-    })
+      isGlobal: true,
+    }),
   ],
 })
 export class AppModule {}
